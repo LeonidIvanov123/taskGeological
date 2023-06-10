@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  serverdb:
+    container_name: GeologicalDB
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: testpwd
+      POSTGRES_DB: GeologicalData
+      TZ: Europe/Moscow
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+    restart: on-failure
+  monitordb:
+    container_name: pgAdmin
+    image: dpage/pgadmin4:6.20
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ewro01@ya.ru
+      PGADMIN_DEFAULT_PASSWORD: 12345
+    ports:
+      - "9991:80"
+    networks:
+      - postgres
+    restart: on-failure
+
+networks:
+  postgres:
+    driver: bridge
