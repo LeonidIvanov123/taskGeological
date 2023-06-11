@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.leonid.taskGeological.Controller.TaskStatus;
 import ru.leonid.taskGeological.Model.GeologicClass;
 import ru.leonid.taskGeological.Model.Selection;
 import ru.leonid.taskGeological.Model.SelectionRepository;
@@ -28,7 +29,7 @@ public class SelectionService {
     private static final Logger log = LoggerFactory.getLogger(SelectionService.class);
 
     //Храним информацию о статусах CompletableFeature-задач(экспорт/импорт)
-    private Map<Integer, String> numOfTask = new ConcurrentHashMap<>();
+    private Map<Integer, TaskStatus> numOfTask = new ConcurrentHashMap<>();
 
     private Map<Integer,XSSFWorkbook> workbookToImport = new ConcurrentHashMap<>();
     public List<Selection> getSelectionByCode(String code){
@@ -43,18 +44,18 @@ public class SelectionService {
     @Async
     public CompletableFuture<String> importToDB(InputStream inputStream, int num){
         log.info("Выполняем в потоке: " + Thread.currentThread().getName() + " num = " + num);
-        numOfTask.put(num, "IN PROGRESS");
+        numOfTask.put(num, TaskStatus.INPROGRESS);
         Workbook workbook;
         try {
             workbook = new XSSFWorkbook(inputStream);
         }catch (IOException exception){
-            numOfTask.put(num, "ERROR");
+            numOfTask.put(num, TaskStatus.ERROR);
             log.error(exception.getMessage());
-            return CompletableFuture.completedFuture("IO Error , task num = "+ num  + " thread: " + Thread.currentThread().getName());
+            return CompletableFuture.failedFuture(exception);
         }
         Sheet datatypeSheet = workbook.getSheetAt(0);
         Iterator<Row> iterator = datatypeSheet.iterator();
-        iterator.next(); //чтение со второй строки
+        iterator.next();
 
         while (iterator.hasNext()) {
             Row currentRow = iterator.next();
@@ -75,7 +76,7 @@ public class SelectionService {
             selection.setGeological(geologicClassList);
             selectionRepository.save(selection);
         }
-        numOfTask.put(num, "DONE");
+        numOfTask.put(num, TaskStatus.DONE);
         log.info(Thread.currentThread().getName() + ": Данные из файла сохранены в БД");
         return CompletableFuture.completedFuture("Complete "+ Thread.currentThread().getName());
     }
@@ -83,19 +84,16 @@ public class SelectionService {
     //Проверить статус выполнения задачи(экспорт/импорт)
     public String getStatusOfTask(Integer id){
         if(numOfTask.containsKey(id))
-            return numOfTask.get(id);
+            return numOfTask.get(id).getTitle();
         else
-            return "Задачи с id " + id + " не существует";
+            return "Task id " + id + " not exist";
     }
-
-
     //формирование xlsx для выгрузки
     @Async
     @Transactional //из за Lazy initialization коллекции в сущности Selection
     public CompletableFuture<Integer> exportFromDB(int num){
-        numOfTask.put(num, "IN PROGRESS");
+        numOfTask.put(num, TaskStatus.INPROGRESS);
         log.info("Начинаем экспорт из БД в xls task= "+ num);
-
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("dataFromBD");
 
@@ -134,10 +132,10 @@ public class SelectionService {
             FileOutputStream outFile = new FileOutputStream("/tmp/export" + num + ".xls");
             workbook.write(outFile);
         }catch (IOException exception){
-            numOfTask.put(num, "ERROR");
+            numOfTask.put(num, TaskStatus.ERROR);
             log.error("Не удалось создать файл / num = "+ num);
         }
-        numOfTask.put(num, "DONE");
+        numOfTask.put(num, TaskStatus.DONE);
         workbookToImport.put(num, workbook);
         log.info("Экспорт из БД в xls выполнен task= "+ num);
 

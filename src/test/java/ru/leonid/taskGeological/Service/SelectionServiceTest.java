@@ -7,15 +7,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mock.web.MockMultipartFile;
-import ru.leonid.taskGeological.Model.GeologicClass;
 import ru.leonid.taskGeological.Model.Selection;
 import ru.leonid.taskGeological.Model.SelectionRepository;
 
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
-class SelectionServiceTestIT {
+class SelectionServiceTest {
 
     @Mock
     SelectionRepository selectionRepository;
@@ -34,19 +32,11 @@ class SelectionServiceTestIT {
         Assertions.assertEquals(result.size(), 1);
         Assertions.assertEquals(result.get(0).getName(), "Selection 2");
     }
-
     @Test
-    void importToDB() {
-        MockMultipartFile multipartFile = new MockMultipartFile("file", "test.xls",
-                "text/plain", "Spring Framework".getBytes());
+    void getStatusOfTask_notExistTask() {
+        String result = selectionService.getStatusOfTask(1);
 
-    }
-
-    @Test
-    void getStatusOfTask() {
-    }
-
-    @Test
-    void exportFromDB() {
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals("Task id 1 not exist", result);
     }
 }

@@ -24,7 +24,7 @@ class SelectionControllerTest {
     SelectionController selectionController;
 
     @Test
-    void getSelectionsByCodeTest_returnSelectionFromDB() throws Exception{
+    void getSelectionsByCodeTest_returnSelectionFromDB(){
         Selection selection = new Selection();
         selection.setName("Selection 123");
         Mockito.doReturn(List.of(selection)).when(selectionService).getSelectionByCode("1");
@@ -41,11 +41,11 @@ class SelectionControllerTest {
         MockMultipartFile multipartFile = new MockMultipartFile("file", "test.xls",
                 "text/plain", "Spring Framework".getBytes());
 
-        ResponseEntity<String> responseEntity = this.selectionController.importFile(multipartFile);
+        ResponseEntity responseEntity = this.selectionController.importFile(multipartFile);
 
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        Assertions.assertEquals("id of import task = 1", responseEntity.getBody());
+        Assertions.assertEquals(1, responseEntity.getBody());
     }
 
     @Test
@@ -60,7 +60,7 @@ class SelectionControllerTest {
     }
 
     @Test
-    void statusOfExport_returnStatus() {
+    void statusOfExport_returnStatusOfExport() {
         Mockito.doReturn("DONE").when(selectionService).getStatusOfTask(1);
 
         ResponseEntity<String> responseEntity = this.selectionController.statusImport(1);
@@ -72,11 +72,11 @@ class SelectionControllerTest {
 
 
     @Test
-    void exportFromDB() {
-        ResponseEntity<String> responseEntity = this.selectionController.exportFromDB();
+    void exportFromDB_returnIdOfTask() {
+        ResponseEntity responseEntity = this.selectionController.exportFromDB();
 
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        Assertions.assertEquals("id of export task = 1", responseEntity.getBody());
+        Assertions.assertEquals(1, responseEntity.getBody());
     }
 }

@@ -25,12 +25,12 @@ public class SelectionController {
     }
 
     @PostMapping("/import")
-    ResponseEntity<String> importFile( @RequestPart("file") MultipartFile file) throws IOException {
+    ResponseEntity importFile( @RequestPart("file") MultipartFile file) throws IOException {
         if (file.isEmpty()) {
             return new ResponseEntity<>("Please select a file. Less than 30 Mb.", HttpStatus.OK);
         }
         selectionService.importToDB(file.getInputStream(), num);
-        return new ResponseEntity<>("id of import task = "+ num++, HttpStatus.OK);
+        return new ResponseEntity<>(num++, HttpStatus.OK);
     }
 
     @GetMapping("/import/{id}")
@@ -39,9 +39,9 @@ public class SelectionController {
     }
 
     @GetMapping("/export")
-    ResponseEntity<String> exportFromDB(){
+    ResponseEntity exportFromDB(){
         selectionService.exportFromDB(num);
-        return new ResponseEntity<>("id of export task = "+ num++, HttpStatus.OK);
+        return new ResponseEntity<>(num++, HttpStatus.OK);
     }
 
     @GetMapping("/export/{id}")
@@ -51,7 +51,7 @@ public class SelectionController {
 
     @GetMapping("/export/{id}/file")
     ResponseEntity returnFile(@PathVariable Integer id) throws IOException {
-        if(!(selectionService.getStatusOfTask(id)=="DONE")){
+        if(!(selectionService.getStatusOfTask(id)==TaskStatus.DONE.getTitle())){
             return new ResponseEntity<>("File export" + id + ".xls not found", HttpStatus.NOT_FOUND);
         }
         File file = new File("/tmp/export" + id + ".xls");
