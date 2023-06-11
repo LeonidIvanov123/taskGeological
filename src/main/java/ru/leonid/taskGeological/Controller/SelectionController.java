@@ -25,11 +25,11 @@ public class SelectionController {
     }
 
     @PostMapping("/import")
-    ResponseEntity<String> importFile( @RequestParam("file") MultipartFile file) throws IOException {
+    ResponseEntity<String> importFile( @RequestPart("file") MultipartFile file) throws IOException {
         if (file.isEmpty()) {
-            return new ResponseEntity<>("please select a file. Less than 20 Mb.", HttpStatus.OK);
+            return new ResponseEntity<>("Please select a file. Less than 30 Mb.", HttpStatus.OK);
         }
-        selectionService.importToDB(file, num);
+        selectionService.importToDB(file.getInputStream(), num);
         return new ResponseEntity<>("id of import task = "+ num++, HttpStatus.OK);
     }
 

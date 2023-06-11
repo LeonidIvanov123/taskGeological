@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface SelectionRepository extends CrudRepository<Selection, Long> {
-
     @Query(nativeQuery = true,
             value = """
                     SELECT s.id,s.name FROM selection s 
@@ -17,7 +16,4 @@ public interface SelectionRepository extends CrudRepository<Selection, Long> {
                     WHERE g.code = ?1
                     """)
     List<Selection> getSelectionByCodeOfGeologicClass(@Param("code") String code);
-
- //   @Query(value = "SELECT s from Selection s")
-  //  List<Selection> getTestQuery();
 }

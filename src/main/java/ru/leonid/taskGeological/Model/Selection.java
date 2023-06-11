@@ -14,7 +14,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-//@JsonIgnoreProperties(ignoreUnknown = true)
 public class Selection {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

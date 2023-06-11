@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import ru.leonid.taskGeological.Model.GeologicClass;
 import ru.leonid.taskGeological.Model.Selection;
 import ru.leonid.taskGeological.Model.SelectionRepository;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,16 +41,16 @@ public class SelectionService {
 
     //Выполнить импорт XlS в БД
     @Async
-    public CompletableFuture<String> importToDB(final MultipartFile file, int num){
+    public CompletableFuture<String> importToDB(InputStream inputStream, int num){
         log.info("Выполняем в потоке: " + Thread.currentThread().getName() + " num = " + num);
         numOfTask.put(num, "IN PROGRESS");
         Workbook workbook;
         try {
-            workbook = new XSSFWorkbook(file.getInputStream());
+            workbook = new XSSFWorkbook(inputStream);
         }catch (IOException exception){
             numOfTask.put(num, "ERROR");
             log.error(exception.getMessage());
-            return CompletableFuture.completedFuture("IO Error " + file.getName() + " thread: " + Thread.currentThread().getName());
+            return CompletableFuture.completedFuture("IO Error , task num = "+ num  + " thread: " + Thread.currentThread().getName());
         }
         Sheet datatypeSheet = workbook.getSheetAt(0);
         Iterator<Row> iterator = datatypeSheet.iterator();
