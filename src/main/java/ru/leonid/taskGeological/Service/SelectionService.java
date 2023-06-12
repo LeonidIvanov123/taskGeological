@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.leonid.taskGeological.Controller.TaskStatus;
 import ru.leonid.taskGeological.Model.GeologicClass;
 import ru.leonid.taskGeological.Model.Selection;
 import ru.leonid.taskGeological.Model.SelectionRepository;

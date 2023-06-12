@@ -1,4 +1,4 @@
-package ru.leonid.taskGeological.Controller;
+package ru.leonid.taskGeological.Service;
 
 public enum TaskStatus {
     DONE("DONE"),

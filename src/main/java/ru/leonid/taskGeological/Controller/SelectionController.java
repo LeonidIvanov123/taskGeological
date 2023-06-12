@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.leonid.taskGeological.Model.Selection;
 import ru.leonid.taskGeological.Service.SelectionService;
+import ru.leonid.taskGeological.Service.TaskStatus;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.util.List;
@@ -51,7 +53,7 @@ public class SelectionController {
 
     @GetMapping("/export/{id}/file")
     ResponseEntity returnFile(@PathVariable Integer id) throws IOException {
-        if(!(selectionService.getStatusOfTask(id)==TaskStatus.DONE.getTitle())){
+        if(!(selectionService.getStatusOfTask(id)== TaskStatus.DONE.getTitle())){
             return new ResponseEntity<>("File export" + id + ".xls not found", HttpStatus.NOT_FOUND);
         }
         File file = new File("/tmp/export" + id + ".xls");
