@@ -8,8 +8,5 @@ public class TaskGeologicalApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TaskGeologicalApplication.class, args);
-
-
 	}
-
 }

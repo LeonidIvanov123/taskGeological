@@ -60,7 +60,7 @@ class SelectionControllerTest {
     }
 
     @Test
-    void statusOfExport_returnStatusOfExport() {
+    void statusOfExportTest_returnStatusOfExport() {
         Mockito.doReturn("DONE").when(selectionService).getStatusOfTask(1);
 
         ResponseEntity<String> responseEntity = this.selectionController.statusImport(1);
@@ -72,11 +72,22 @@ class SelectionControllerTest {
 
 
     @Test
-    void exportFromDB_returnIdOfTask() {
+    void exportFromDBTest_returnIdOfTask() {
         ResponseEntity responseEntity = this.selectionController.exportFromDB();
 
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         Assertions.assertEquals(1, responseEntity.getBody());
+    }
+
+    @Test
+    void statusOfExportTest_checkStatusOfExport() {
+        Mockito.doReturn("IN PROGRESS").when(selectionService).getStatusOfTask(2);
+
+        ResponseEntity responseEntity = this.selectionController.statusOfExport(2);
+
+        Assertions.assertNotNull(responseEntity);
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assertions.assertEquals("IN PROGRESS", responseEntity.getBody());
     }
 }

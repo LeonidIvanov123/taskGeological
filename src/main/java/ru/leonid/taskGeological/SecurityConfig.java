@@ -2,6 +2,7 @@ package ru.leonid.taskGeological;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -26,12 +27,12 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.securityMatcher("/**").httpBasic().and()
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .csrf().disable()
+        httpSecurity.sessionManagement(smCustom -> smCustom.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        httpSecurity.authorizeHttpRequests(request -> request.anyRequest().authenticated()).httpBasic(Customizer.withDefaults());
+        return httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
