@@ -29,7 +29,6 @@ class UserServiceTest {
             Assertions.assertEquals(exception.getMessage(), "Пользователь с именем Testuser не найден");
         }
     }
-
     @Test
     void loadUserByUsernameTest_returnExistUserFromRepository(){
         User user = new User();
@@ -42,7 +41,6 @@ class UserServiceTest {
         Assertions.assertNotNull(userDetails);
         Assertions.assertEquals(user.getUsername(), userDetails.getUsername());
         Assertions.assertEquals(user.getPassword(), userDetails.getPassword());
-
     }
 
     @Test
@@ -68,5 +66,4 @@ class UserServiceTest {
 
         Assertions.assertFalse(statusOfSave);
     }
-
 }
