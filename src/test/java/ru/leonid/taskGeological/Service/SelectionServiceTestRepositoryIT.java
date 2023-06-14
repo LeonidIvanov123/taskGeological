@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import ru.leonid.taskGeological.Model.Selection;
-import ru.leonid.taskGeological.Model.SelectionRepository;
+import ru.leonid.taskGeological.Repository.SelectionRepository;
 
 import java.io.File;
 import java.io.FileInputStream;

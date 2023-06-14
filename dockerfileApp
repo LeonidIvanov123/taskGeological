@@ -1,0 +1,7 @@
+FROM openjdk
+RUN mkdir /geologicapp
+COPY target/taskGeological-0.0.1-SNAPSHOT.jar /geologicapp/taskGeological.jar
+WORKDIR /geologicapp
+ENV LC_ALL C.UTF-8
+ENV TZ Europe/Moscow
+ENV PATH=${PATH}:/geologicapp

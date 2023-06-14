@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.leonid.taskGeological.Model.Selection;
-import ru.leonid.taskGeological.Model.SelectionRepository;
+import ru.leonid.taskGeological.Repository.SelectionRepository;
 
 import java.util.List;
 

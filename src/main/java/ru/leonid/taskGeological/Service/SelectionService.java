@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.leonid.taskGeological.Model.GeologicClass;
 import ru.leonid.taskGeological.Model.Selection;
-import ru.leonid.taskGeological.Model.SelectionRepository;
+import ru.leonid.taskGeological.Repository.SelectionRepository;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
