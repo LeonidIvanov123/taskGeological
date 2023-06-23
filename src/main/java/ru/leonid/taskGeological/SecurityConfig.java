@@ -31,6 +31,7 @@ public class SecurityConfig {
                 .csrf(csrf-> csrf.ignoringRequestMatchers("/import/**"))
                 .build();
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

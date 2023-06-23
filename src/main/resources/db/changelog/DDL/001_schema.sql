@@ -1,3 +1,6 @@
+--liquibase formatted sql
+--changeset leonid:create-tablesAndSequences splitStatements:true endDelimiter:;
+
 create table geologic_class (
         id bigint not null,
         code varchar(255),

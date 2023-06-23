@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: leonid
+  - include:
+      file: /DDL/001_schema.sql
+      relativeToChangelogFile: true

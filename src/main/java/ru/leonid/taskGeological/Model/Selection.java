@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Selection {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @JsonIgnore
     private Long id;
     private String name;

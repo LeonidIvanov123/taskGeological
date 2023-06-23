@@ -63,4 +63,9 @@ public class SelectionController {
         headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=export" + id + ".xls");
         return new ResponseEntity<>(new ByteArrayResource(resource.getByteArray()), headers, HttpStatus.CREATED);
     }
+
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity handlerException(IOException exception){
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.OK);
+    }
 }

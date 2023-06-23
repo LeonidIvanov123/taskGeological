@@ -27,9 +27,9 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public boolean saveUser(User user){
+    public synchronized boolean saveUser(User user){
         if(userRepository.findByUsername(user.getUsername()) != null){
-            log.warn("Невозможно создать пользователя " + user.getUsername() + ". Он уже существует.");
+            log.error("Невозможно создать пользователя " + user.getUsername() + ". Он уже существует.");
             return false;
         }
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
