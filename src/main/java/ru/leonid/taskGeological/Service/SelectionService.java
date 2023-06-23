@@ -1,5 +1,6 @@
 package ru.leonid.taskGeological.Service;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -15,9 +16,7 @@ import ru.leonid.taskGeological.Model.GeologicClass;
 import ru.leonid.taskGeological.Model.Selection;
 import ru.leonid.taskGeological.Repository.SelectionRepository;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,6 +40,7 @@ public class SelectionService {
 
     //Выполнить импорт XlS в БД
     @Async
+    @Transactional
     public CompletableFuture<String> importToDB(InputStream inputStream, int num){
         log.info("Выполняем в потоке: " + Thread.currentThread().getName() + " num = " + num);
         numOfTask.put(num, TaskStatus.INPROGRESS);
@@ -127,12 +127,13 @@ public class SelectionService {
             indrow++;
         }
         log.info("Данные из БД обработаны. Создаем новый файл на экспорт / num = "+ num);
-        try {
-            FileOutputStream outFile = new FileOutputStream("/tmp/export" + num + ".xls");
+
+        try(FileOutputStream outFile = FileUtils.openOutputStream(new File("/tmp/export" + num + ".xls"));){
             workbook.write(outFile);
-        }catch (IOException exception){
+        } catch (IOException e) {
             numOfTask.put(num, TaskStatus.ERROR);
             log.error("Не удалось создать файл / num = "+ num);
+            throw new RuntimeException(e);
         }
         numOfTask.put(num, TaskStatus.DONE);
         workbookToImport.put(num, workbook);

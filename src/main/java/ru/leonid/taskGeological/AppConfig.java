@@ -15,7 +15,7 @@ public class AppConfig {
         executor.setCorePoolSize(4);
         executor.setMaxPoolSize(4);
         executor.setQueueCapacity(100);
-        executor.setThreadNamePrefix("ImportFile-");
+        executor.setThreadNamePrefix("ImportExportFile-");
         executor.initialize();
         return executor;
     }

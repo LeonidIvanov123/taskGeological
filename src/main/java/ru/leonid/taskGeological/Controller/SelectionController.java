@@ -14,10 +14,11 @@ import ru.leonid.taskGeological.Service.TaskStatus;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
 public class SelectionController {
-    private int num = 1;
+    private AtomicInteger num = new AtomicInteger(1);
     @Autowired
     SelectionService selectionService;
 
@@ -27,12 +28,12 @@ public class SelectionController {
     }
 
     @PostMapping("/import")
-    ResponseEntity importFile( @RequestPart("file") MultipartFile file) throws IOException {
+    synchronized ResponseEntity importFile( @RequestPart("file") MultipartFile file) throws IOException {
         if (file.isEmpty()) {
             return new ResponseEntity<>("Please select a file. Less than 30 Mb.", HttpStatus.OK);
         }
-        selectionService.importToDB(file.getInputStream(), num);
-        return new ResponseEntity<>(num++, HttpStatus.OK);
+        selectionService.importToDB(file.getInputStream(), num.get());
+        return new ResponseEntity<>(num.getAndIncrement(), HttpStatus.OK);
     }
 
     @GetMapping("/import/{id}")
@@ -41,9 +42,9 @@ public class SelectionController {
     }
 
     @GetMapping("/export")
-    ResponseEntity exportFromDB(){
-        selectionService.exportFromDB(num);
-        return new ResponseEntity<>(num++, HttpStatus.OK);
+    synchronized ResponseEntity exportFromDB(){
+        selectionService.exportFromDB(num.get());
+        return new ResponseEntity<>(num.getAndIncrement(), HttpStatus.OK);
     }
 
     @GetMapping("/export/{id}")
