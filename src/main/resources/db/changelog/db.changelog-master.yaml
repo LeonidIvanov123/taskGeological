@@ -5,3 +5,13 @@ databaseChangeLog:
   - include:
       file: /DDL/001_schema.sql
       relativeToChangelogFile: true
+  - changeSet:
+      id: 2
+      author: leonid
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              name: isBlocked
+              type: boolean
+              defaultValue: false
