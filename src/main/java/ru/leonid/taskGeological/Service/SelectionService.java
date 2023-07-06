@@ -89,7 +89,7 @@ public class SelectionService {
     }
     //формирование xlsx для выгрузки
     @Async
-    @Transactional //из за Lazy initialization коллекции в сущности Selection
+    @Transactional(readOnly = true) //из за Lazy initialization коллекции в сущности Selection
     public CompletableFuture<Integer> exportFromDB(int num){
         numOfTask.put(num, TaskStatus.INPROGRESS);
         log.info("Начинаем экспорт из БД в xls task= "+ num);

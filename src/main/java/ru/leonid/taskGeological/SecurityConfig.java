@@ -38,7 +38,7 @@ public class SecurityConfig {
     }
 
     //Создаем test-пользователя
-    @Bean
+ /*   @Bean
     public CommandLineRunner commandLineRunner(){
         return (args)->{
             User user = new User();
@@ -47,6 +47,10 @@ public class SecurityConfig {
             userService.saveUser(user);
         };
     }
+
+
+  */
+
 
 
 }
